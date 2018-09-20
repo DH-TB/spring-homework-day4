@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.grads.controller.UserController;
 import com.thoughtworks.grads.domain.Contact;
 import com.thoughtworks.grads.domain.User;
+import com.thoughtworks.grads.repository.ContactStorage;
 import com.thoughtworks.grads.repository.UserStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 
 import static com.thoughtworks.grads.domain.Sex.FEMALE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,4 +68,47 @@ class UserControllerTests {
                 .andExpect(jsonPath("$[1].id").value(2))
                 .andExpect(jsonPath("$[1].name").value("huanglizhen"));
     }
+
+    @Test
+    void should_update_contacts_when_given_user() throws Exception {
+        Contact douqing = new Contact(1, "douqing", 20, "15091671302", FEMALE);
+        Contact huanglizhen = new Contact(2, "huanglizhen", 20, "15091671302", FEMALE);
+
+        User user = new User(5, "huanglizhen", Arrays.asList(douqing, huanglizhen));
+        UserStorage.put(user);
+
+        int originSize = ContactStorage.getSize();
+
+        Contact modifyContact = new Contact(1, "doudou", 18);
+        mockMvc.perform(put("/api/users/{id}", user.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(modifyContact)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(5))
+                .andExpect(jsonPath("$['contacts'][0]['name']").value("doudou"))
+                .andExpect(jsonPath("$['contacts'][0]['age']").value(18));
+
+        int currentSize = ContactStorage.getSize();
+        assertEquals(originSize, currentSize);
+    }
+
+    @Test
+    void should_delete_contacts_when_given_user() throws Exception {
+        Contact douqing = new Contact(1, "douqing", 20, "15091671302", FEMALE);
+        Contact huanglizhen = new Contact(2, "huanglizhen", 20, "15091671302", FEMALE);
+
+        User user = new User(5, "huanglizhen", Arrays.asList(douqing, huanglizhen));
+        UserStorage.put(user);
+
+        int originSize = ContactStorage.getSize();
+        mockMvc.perform(delete("/api/users/{userId}/contacts/{contactId}", user.getId(), douqing.getId()))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        int currentSize = ContactStorage.getSize();
+        assertEquals(originSize - 1, currentSize);
+    }
+
+    
 }

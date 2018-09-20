@@ -44,6 +44,7 @@ public class User {
     }
 
     public void setContactList(Contact... contact) {
-        contacts.addAll(Arrays.asList(contact));
+        ArrayList<Contact> contacts = new ArrayList<>(Arrays.asList(contact));
+        this.contacts.addAll(contacts);
     }
 }

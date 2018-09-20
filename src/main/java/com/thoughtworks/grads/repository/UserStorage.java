@@ -11,7 +11,7 @@ public class UserStorage {
 
     public static void put(User user) {
         if (user.getContacts() != null) {
-            ContactStorage.addAll(user.getContacts());
+            ContactStorage.putAll(user.getContacts());
         }
 
         USERS.put(user.getId(), user);
@@ -25,7 +25,7 @@ public class UserStorage {
         User user = UserStorage.getUserById(id);
         user.setContactList(contact);
         UserStorage.put(user);
-        ContactStorage.add(contact);
+        ContactStorage.put(contact);
 
         return user;
     }
@@ -37,5 +37,34 @@ public class UserStorage {
 
     public static User findByUserId(Integer id) {
         return USERS.get(id);
+    }
+
+    public static User updateUserContact(Integer id, Contact contact) {
+        User user = UserStorage.getUserById(id);
+        Contact findContact = user.getContacts().stream()
+                .filter(filteredContact -> filteredContact.getId().equals(contact.getId()))
+                .findFirst()
+                .orElse(null);
+
+        if(findContact == null) {
+            ContactStorage.put(contact);
+            user.setContactList(contact);
+        }
+        else {
+            findContact.setAge(contact.getAge());
+            findContact.setName(contact.getName());
+
+            ContactStorage.update(contact);
+        }
+        return user;
+    }
+
+    public static int getSize() {
+        return USERS.size();
+    }
+
+    public static void deleteUserContact(Integer userId, Integer contactId) {
+        User user = UserStorage.getUserById(userId);
+        ContactStorage.delete(contactId);
     }
 }

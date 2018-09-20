@@ -16,4 +16,14 @@ public class UserRepositoryImpl implements UserRepository {
     public User findByUserId(Integer id) {
         return UserStorage.findByUserId(id);
     }
+
+    @Override
+    public User updateUserContact(Integer id, Contact contact) {
+        return UserStorage.updateUserContact(id, contact);
+    }
+
+    @Override
+    public void deleteUserContact(Integer userId, Integer contactId) {
+        UserStorage.deleteUserContact(userId, contactId);
+    }
 }

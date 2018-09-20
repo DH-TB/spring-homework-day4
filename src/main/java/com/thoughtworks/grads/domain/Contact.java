@@ -10,6 +10,12 @@ public class Contact {
     public Contact() {
     }
 
+    public Contact(Integer id, String name, Integer age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
     public Contact(Integer id, String name, Integer age, String phone, Sex sex) {
         this.id = id;
         this.name = name;

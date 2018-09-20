@@ -25,4 +25,16 @@ public class UserController {
         User user = userRepository.findByUserId(id);
         return new ResponseEntity<>(user.getContacts(), HttpStatus.OK);
     }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity updateUserContact(@PathVariable Integer id, @RequestBody Contact contact) {
+        User user = userRepository.updateUserContact(id, contact);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/users/{userId}/contacts/{contactId}")
+    public ResponseEntity deleteUserContact(@PathVariable Integer userId, @PathVariable Integer contactId) {
+        userRepository.deleteUserContact(userId, contactId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
