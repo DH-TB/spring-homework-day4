@@ -37,4 +37,10 @@ public class UserController {
         userRepository.deleteUserContact(userId, contactId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("users/{userName}/contacts/{contactName}")
+    public ResponseEntity queryContactsByName(@PathVariable String userName, @PathVariable String contactName) {
+        Contact contact = userRepository.findByName(userName, contactName);
+        return new ResponseEntity<>(contact, HttpStatus.OK);
+    }
 }

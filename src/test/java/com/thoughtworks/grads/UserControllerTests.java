@@ -54,11 +54,7 @@ class UserControllerTests {
 
     @Test
     void should_query_all_contacts() throws Exception {
-        Contact douqing = new Contact(1, "douqing", 20, "15091671302", FEMALE);
-        Contact huanglizhen = new Contact(2, "huanglizhen", 20, "15091671302", FEMALE);
-
-        User user = new User(5, "huanglizhen", Arrays.asList(douqing, huanglizhen));
-        UserStorage.put(user);
+        User user = initUsersAndContacts();
 
         mockMvc.perform(get("/api/users/{id}", user.getId()))
                 .andDo(print())
@@ -69,13 +65,18 @@ class UserControllerTests {
                 .andExpect(jsonPath("$[1].name").value("huanglizhen"));
     }
 
-    @Test
-    void should_update_contacts_when_given_user() throws Exception {
+    private User initUsersAndContacts() {
         Contact douqing = new Contact(1, "douqing", 20, "15091671302", FEMALE);
         Contact huanglizhen = new Contact(2, "huanglizhen", 20, "15091671302", FEMALE);
 
         User user = new User(5, "huanglizhen", Arrays.asList(douqing, huanglizhen));
         UserStorage.put(user);
+        return user;
+    }
+
+    @Test
+    void should_update_contacts_when_given_user() throws Exception {
+        User user = initUsersAndContacts();
 
         int originSize = ContactStorage.getSize();
 
@@ -110,5 +111,18 @@ class UserControllerTests {
         assertEquals(originSize - 1, currentSize);
     }
 
-    
+    @Test
+    void should_query_contact() throws Exception {
+        Contact douqing = new Contact(1, "douqing", 20, "15091671302", FEMALE);
+        Contact huanglizhen = new Contact(2, "huanglizhen", 20, "15091671302", FEMALE);
+
+        User user = new User(5, "huanglizhen", Arrays.asList(douqing, huanglizhen));
+        UserStorage.put(user);
+
+        mockMvc.perform(get("/api/users/{userName}/contacts/{contactName}", user.getName(), douqing.getName()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("douqing"))
+                .andExpect(jsonPath("$.id").value(1));
+    }
 }

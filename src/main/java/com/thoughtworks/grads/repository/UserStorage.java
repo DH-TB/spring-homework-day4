@@ -3,6 +3,7 @@ package com.thoughtworks.grads.repository;
 import com.thoughtworks.grads.domain.Contact;
 import com.thoughtworks.grads.domain.User;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,11 +47,10 @@ public class UserStorage {
                 .findFirst()
                 .orElse(null);
 
-        if(findContact == null) {
+        if (findContact == null) {
             ContactStorage.put(contact);
             user.setContactList(contact);
-        }
-        else {
+        } else {
             findContact.setAge(contact.getAge());
             findContact.setName(contact.getName());
 
@@ -66,5 +66,11 @@ public class UserStorage {
     public static void deleteUserContact(Integer userId, Integer contactId) {
         User user = UserStorage.getUserById(userId);
         ContactStorage.delete(contactId);
+    }
+
+    public static Contact findByName(String userName, String contactName) {
+        Collection<User> values = USERS.values();
+        User user = values.stream().filter(value -> value.getName().equals(userName)).findFirst().get();
+        return user.getContacts().stream().filter(contact -> contact.getName().equals(contactName)).findFirst().get();
     }
 }
