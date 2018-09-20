@@ -2,12 +2,13 @@ package com.thoughtworks.grads.domain;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class User {
     private Integer id;
     private String name;
-    private List<Contact> contacts = new ArrayList<>();
+    private List<Contact> contacts = new LinkedList<>();
 
     public User() {
     }
@@ -43,8 +44,13 @@ public class User {
         return contacts;
     }
 
-    public void setContactList(Contact... contact) {
-        ArrayList<Contact> contacts = new ArrayList<>(Arrays.asList(contact));
-        this.contacts.addAll(contacts);
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    public void addContact(Contact... contact) {
+        List<Contact> contacts11 = Arrays.asList(contact);
+        List<Contact> list = new LinkedList<>(contacts11);
+        this.contacts.addAll(list);
     }
 }

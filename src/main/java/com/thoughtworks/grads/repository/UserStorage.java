@@ -3,10 +3,7 @@ package com.thoughtworks.grads.repository;
 import com.thoughtworks.grads.domain.Contact;
 import com.thoughtworks.grads.domain.User;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class UserStorage {
     private static final Map<Integer, User> USERS = new HashMap<>();
@@ -25,7 +22,7 @@ public class UserStorage {
 
     public static User addUserContact(Integer id, Contact contact) {
         User user = UserStorage.getUserById(id);
-        user.setContactList(contact);
+        user.addContact(contact);
         UserStorage.put(user);
         ContactStorage.put(contact);
 
@@ -50,7 +47,7 @@ public class UserStorage {
 
         if (findContact == null) {
             ContactStorage.put(contact);
-            user.setContactList(contact);
+            user.addContact(contact);
         } else {
             findContact.setAge(contact.getAge());
             findContact.setName(contact.getName());
@@ -66,13 +63,16 @@ public class UserStorage {
 
     public static void deleteUserContact(Integer userId, Integer contactId) {
         User user = UserStorage.getUserById(userId);
+
+        user.getContacts().removeIf(contact1 -> contact1.getId().equals(contactId));
+
         ContactStorage.delete(contactId);
     }
 
     public static Contact findByName(String userName, String contactName) {
         Collection<User> values = USERS.values();
         Optional<User> user = values.stream().filter(value -> value.getName().equals(userName)).findFirst();
-        if(!user.isPresent()) {
+        if (!user.isPresent()) {
             return null;
         }
         Optional<Contact> filteredContact = user.get().getContacts().stream().filter(contact -> contact.getName().equals(contactName)).findFirst();

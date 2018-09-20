@@ -30,4 +30,9 @@ public class ContactStorage {
     public static void delete(Integer contactId) {
         CONTACTS.remove(contactId);
     }
+
+    public static Contact getById(Integer contactId) {
+        return CONTACTS.get(contactId);
+
+    }
 }

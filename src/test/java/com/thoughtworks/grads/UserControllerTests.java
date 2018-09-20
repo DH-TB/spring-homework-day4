@@ -102,13 +102,19 @@ class UserControllerTests {
         User user = new User(5, "huanglizhen", Arrays.asList(douqing, huanglizhen));
         UserStorage.put(user);
 
+        int originContactSize = UserStorage.getUserById(user.getId()).getContacts().size();
+
         int originSize = ContactStorage.getSize();
         mockMvc.perform(delete("/api/users/{userId}/contacts/{contactId}", user.getId(), douqing.getId()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
         int currentSize = ContactStorage.getSize();
+        int currentContactSize = UserStorage.getUserById(user.getId()).getContacts().size();
+
         assertEquals(originSize - 1, currentSize);
+        assertEquals(originContactSize - 1, currentContactSize);
+
     }
 
     @Test
