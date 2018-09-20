@@ -6,25 +6,14 @@ import com.thoughtworks.grads.repository.UserRepository;
 import com.thoughtworks.grads.repository.UserStorage;
 
 public class UserRepositoryImpl implements UserRepository {
-
     @Override
-    public User addUserContact(Integer id, Contact contact) {
-        return UserStorage.addUserContact(id, contact);
+    public void addUserContact(Integer id, Contact contact) {
+        UserStorage.addUserContact(id, contact);
     }
 
     @Override
     public User findByUserId(Integer id) {
         return UserStorage.findByUserId(id);
-    }
-
-    @Override
-    public User updateUserContact(Integer id, Contact contact) {
-        return UserStorage.updateUserContact(id, contact);
-    }
-
-    @Override
-    public void deleteUserContact(Integer userId, Integer contactId) {
-        UserStorage.deleteUserContact(userId, contactId);
     }
 
     @Override

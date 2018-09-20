@@ -16,17 +16,9 @@ public class UserStorage {
         USERS.put(user.getId(), user);
     }
 
-    public static User getUserById(Integer userId) {
-        return USERS.get(userId);
-    }
-
-    public static User addUserContact(Integer id, Contact contact) {
-        User user = UserStorage.getUserById(id);
-        user.addContact(contact);
-        UserStorage.put(user);
+    public static void addUserContact(Integer id, Contact contact) {
+        contact.setUserId(id);
         ContactStorage.put(contact);
-
-        return user;
     }
 
 
@@ -35,38 +27,12 @@ public class UserStorage {
     }
 
     public static User findByUserId(Integer id) {
-        return USERS.get(id);
-    }
+        List<Contact> contacts = ContactStorage.findByUserId(id);
 
-    public static User updateUserContact(Integer id, Contact contact) {
-        User user = UserStorage.getUserById(id);
-        Contact findContact = user.getContacts().stream()
-                .filter(filteredContact -> filteredContact.getId().equals(contact.getId()))
-                .findFirst()
-                .orElse(null);
+        User user = USERS.get(id);
+        user.setContacts(contacts);
 
-        if (findContact == null) {
-            ContactStorage.put(contact);
-            user.addContact(contact);
-        } else {
-            findContact.setAge(contact.getAge());
-            findContact.setName(contact.getName());
-
-            ContactStorage.update(contact);
-        }
         return user;
-    }
-
-    public static int getSize() {
-        return USERS.size();
-    }
-
-    public static void deleteUserContact(Integer userId, Integer contactId) {
-        User user = UserStorage.getUserById(userId);
-
-        user.getContacts().removeIf(contact1 -> contact1.getId().equals(contactId));
-
-        ContactStorage.delete(contactId);
     }
 
     public static Contact findByName(String userName, String contactName) {

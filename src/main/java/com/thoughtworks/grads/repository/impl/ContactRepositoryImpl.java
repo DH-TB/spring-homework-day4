@@ -8,5 +8,16 @@ public class ContactRepositoryImpl implements ContactRepository {
 
     @Override
     public void addContact(Integer userId, Contact contact) {
+        ContactStorage.addContact(userId, contact);
+    }
+
+    @Override
+    public void updateContact(Integer userId, Contact contact) {
+        ContactStorage.updateContact(userId, contact);
+    }
+
+    @Override
+    public void deleteByUserIdAndContactId(Integer userId, Integer contactId) {
+        ContactStorage.deleteByUserIdAndContactId(userId, contactId);
     }
 }

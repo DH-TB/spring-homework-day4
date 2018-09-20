@@ -2,6 +2,7 @@ package com.thoughtworks.grads.domain;
 
 public class Contact {
     private Integer id;
+    private Integer userId;
     private String name;
     private Integer age;
     private String phone;
@@ -16,8 +17,17 @@ public class Contact {
         this.age = age;
     }
 
-    public Contact(Integer id, String name, Integer age, String phone, Sex sex) {
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Contact(Integer id, Integer userId, String name, Integer age, String phone, Sex sex) {
         this.id = id;
+        this.userId = userId;
         this.name = name;
         this.age = age;
         this.phone = phone;
@@ -26,10 +36,6 @@ public class Contact {
 
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -46,6 +52,10 @@ public class Contact {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getPhone() {
