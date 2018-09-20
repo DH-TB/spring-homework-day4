@@ -6,6 +6,7 @@ import com.thoughtworks.grads.domain.User;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class UserStorage {
     private static final Map<Integer, User> USERS = new HashMap<>();
@@ -70,7 +71,12 @@ public class UserStorage {
 
     public static Contact findByName(String userName, String contactName) {
         Collection<User> values = USERS.values();
-        User user = values.stream().filter(value -> value.getName().equals(userName)).findFirst().get();
-        return user.getContacts().stream().filter(contact -> contact.getName().equals(contactName)).findFirst().get();
+        Optional<User> user = values.stream().filter(value -> value.getName().equals(userName)).findFirst();
+        if(!user.isPresent()) {
+            return null;
+        }
+        Optional<Contact> filteredContact = user.get().getContacts().stream().filter(contact -> contact.getName().equals(contactName)).findFirst();
+
+        return filteredContact.orElse(null);
     }
 }

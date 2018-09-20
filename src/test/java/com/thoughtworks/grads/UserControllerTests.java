@@ -125,4 +125,30 @@ class UserControllerTests {
                 .andExpect(jsonPath("$.name").value("douqing"))
                 .andExpect(jsonPath("$.id").value(1));
     }
+
+    @Test
+    void should_fail_when_query_user_not_found() throws Exception {
+        Contact douqing = new Contact(1, "douqing", 20, "15091671302", FEMALE);
+        Contact huanglizhen = new Contact(2, "huanglizhen", 20, "15091671302", FEMALE);
+
+        User user = new User(5, "huanglizhen", Arrays.asList(douqing, huanglizhen));
+        UserStorage.put(user);
+
+        mockMvc.perform(get("/api/users/{userName}/contacts/{contactName}", "hhhhhhhh", douqing.getName()))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void should_fail_when_query_contact_not_found() throws Exception {
+        Contact douqing = new Contact(1, "douqing", 20, "15091671302", FEMALE);
+        Contact huanglizhen = new Contact(2, "huanglizhen", 20, "15091671302", FEMALE);
+
+        User user = new User(5, "huanglizhen", Arrays.asList(douqing, huanglizhen));
+        UserStorage.put(user);
+
+        mockMvc.perform(get("/api/users/{userName}/contacts/{contactName}", user.getName(), "xxxxxx"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 }

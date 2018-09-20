@@ -41,6 +41,9 @@ public class UserController {
     @GetMapping("users/{userName}/contacts/{contactName}")
     public ResponseEntity queryContactsByName(@PathVariable String userName, @PathVariable String contactName) {
         Contact contact = userRepository.findByName(userName, contactName);
+        if(contact == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(contact, HttpStatus.OK);
     }
 }
