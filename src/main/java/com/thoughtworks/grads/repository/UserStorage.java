@@ -10,6 +10,10 @@ public class UserStorage {
     private static final Map<Integer, User> USERS = new HashMap<>();
 
     public static void put(User user) {
+        if (user.getContacts() != null) {
+            ContactStorage.addAll(user.getContacts());
+        }
+
         USERS.put(user.getId(), user);
     }
 
@@ -29,5 +33,9 @@ public class UserStorage {
 
     public static void clear() {
         USERS.clear();
+    }
+
+    public static User findByUserId(Integer id) {
+        return USERS.get(id);
     }
 }

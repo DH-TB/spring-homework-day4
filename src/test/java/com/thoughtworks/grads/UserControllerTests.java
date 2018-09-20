@@ -10,7 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
+
 import static com.thoughtworks.grads.domain.Sex.FEMALE;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -46,5 +49,22 @@ class UserControllerTests {
                 .andExpect(jsonPath("$.contacts.[0].id").value(1))
                 .andExpect(jsonPath("$.contacts.[0].name").value("douqing"))
                 .andExpect(jsonPath("$.contacts.[0].sex").value("FEMALE"));
+    }
+
+    @Test
+    void should_query_all_contacts() throws Exception {
+        Contact douqing = new Contact(1, "douqing", 20, "15091671302", FEMALE);
+        Contact huanglizhen = new Contact(2, "huanglizhen", 20, "15091671302", FEMALE);
+
+        User user = new User(5, "huanglizhen", Arrays.asList(douqing, huanglizhen));
+        UserStorage.put(user);
+
+        mockMvc.perform(get("/api/users/{id}", user.getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("douqing"))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].name").value("huanglizhen"));
     }
 }

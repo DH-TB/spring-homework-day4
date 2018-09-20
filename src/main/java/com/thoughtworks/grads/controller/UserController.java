@@ -19,4 +19,10 @@ public class UserController {
         User user = userRepository.addUserContact(id, contact);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity queryContactsByUserId(@PathVariable Integer id) {
+        User user = userRepository.findByUserId(id);
+        return new ResponseEntity<>(user.getContacts(), HttpStatus.OK);
+    }
 }

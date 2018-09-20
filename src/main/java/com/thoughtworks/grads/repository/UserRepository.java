@@ -5,4 +5,6 @@ import com.thoughtworks.grads.domain.User;
 
 public interface UserRepository {
     User addUserContact(Integer id, Contact contact);
+
+    User findByUserId(Integer id);
 }
