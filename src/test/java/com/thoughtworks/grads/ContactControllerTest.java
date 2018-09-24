@@ -38,7 +38,7 @@ class ContactControllerTest {
 
         Contact contact = new Contact(1, 5, "douqing", 20, "15091671302", FEMALE);
 
-        mockMvc.perform(post("/api/contracts/{userId}", user.getId())
+        mockMvc.perform(post("/api/users/{userId}/contracts", user.getId())
                 .content(new ObjectMapper().writeValueAsString(contact))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -51,7 +51,6 @@ class ContactControllerTest {
                 .andExpect(jsonPath("$['contacts'][0]['sex']").value("FEMALE"));
     }
 
-
     @Test
     void should_update_contacts_when_given_user() throws Exception {
         Contact douqing = new Contact(1, 5, "douqing", 20, "15091671302", FEMALE);
@@ -63,7 +62,7 @@ class ContactControllerTest {
         int originSize = ContactStorage.getSize();
 
         Contact modifyContact = new Contact(1, "doudou", 18);
-        mockMvc.perform(put("/api/contracts/{userId}", user.getId())
+        mockMvc.perform(put("/api/users/{userId}/contracts/{contactId}", user.getId(), modifyContact.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(modifyContact)))
                 .andDo(print())

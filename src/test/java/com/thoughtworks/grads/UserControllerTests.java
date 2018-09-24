@@ -1,22 +1,17 @@
 package com.thoughtworks.grads;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thoughtworks.grads.controller.ContactController;
 import com.thoughtworks.grads.controller.UserController;
 import com.thoughtworks.grads.domain.Contact;
 import com.thoughtworks.grads.domain.User;
-import com.thoughtworks.grads.repository.ContactStorage;
 import com.thoughtworks.grads.repository.UserStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 
 import static com.thoughtworks.grads.domain.Sex.FEMALE;
-import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,7 +31,7 @@ class UserControllerTests {
     void should_query_all_contacts() throws Exception {
         User user = initUsersAndContacts();
 
-        mockMvc.perform(get("/api/users/{id}", user.getId()))
+        mockMvc.perform(get("/api/users/{userId}/contacts", user.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
@@ -44,6 +39,7 @@ class UserControllerTests {
                 .andExpect(jsonPath("$[1].id").value(2))
                 .andExpect(jsonPath("$[1].name").value("huanglizhen"));
     }
+
 
     private User initUsersAndContacts() {
         Contact douqing = new Contact(1, 5, "douqing", 20, "15091671302", FEMALE);

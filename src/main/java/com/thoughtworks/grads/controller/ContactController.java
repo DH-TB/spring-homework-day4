@@ -16,7 +16,7 @@ public class ContactController {
     private ContactRepository contactRepository = new ContactRepositoryImpl();
     private UserRepository userRepository = new UserRepositoryImpl();
 
-    @PostMapping("/contracts/{userId}")
+    @PostMapping("users/{userId}/contracts")
     public ResponseEntity saveUserContact(@PathVariable Integer userId, @RequestBody Contact contact) {
         contactRepository.addContact(userId, contact);
         userRepository.addUserContact(userId, contact);
@@ -25,9 +25,9 @@ public class ContactController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @PutMapping("/contracts/{userId}")
-    public ResponseEntity updateUserContact(@PathVariable Integer userId, @RequestBody Contact contact) {
-        contactRepository.updateContact(userId, contact);
+    @PutMapping("users/{userId}/contracts/{contactId}")
+    public ResponseEntity updateUserContact(@PathVariable Integer userId, @PathVariable Integer contactId, @RequestBody Contact contact) {
+        contactRepository.updateContact(userId,contactId, contact);
         User user = userRepository.findByUserId(userId);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

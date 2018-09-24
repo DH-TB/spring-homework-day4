@@ -35,8 +35,8 @@ public class ContactStorage {
         return contactStream.collect(Collectors.toList());
     }
 
-    public static void updateContact(Integer userId, Contact contact) {
-        Contact getContact = CONTACTS.get(contact.getId());
+    public static void updateContact(Integer userId, Integer contactId,Contact contact) {
+        Contact getContact = CONTACTS.get(contactId);
         getContact.setUserId(userId);
         getContact.setAge(contact.getAge());
         getContact.setName(contact.getName());

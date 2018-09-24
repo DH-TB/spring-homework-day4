@@ -12,8 +12,8 @@ public class ContactRepositoryImpl implements ContactRepository {
     }
 
     @Override
-    public void updateContact(Integer userId, Contact contact) {
-        ContactStorage.updateContact(userId, contact);
+    public void updateContact(Integer userId, Integer contactId, Contact contact) {
+        ContactStorage.updateContact(userId, contactId, contact);
     }
 
     @Override

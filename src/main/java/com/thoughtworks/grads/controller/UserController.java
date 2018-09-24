@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private UserRepository userRepository = new UserRepositoryImpl();
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity queryContactsByUserId(@PathVariable Integer id) {
-        User user = userRepository.findByUserId(id);
+    @GetMapping("/users/{userId}/contacts")
+    public ResponseEntity queryContactsByUserId(@PathVariable Integer userId) {
+        User user = userRepository.findByUserId(userId);
+        if(user == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        }
         return new ResponseEntity<>(user.getContacts(), HttpStatus.OK);
     }
 
